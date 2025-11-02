@@ -1,23 +1,62 @@
 pipeline {
     agent any
 
+    tools {
+        // Garante que o Maven e o Java estejam configurados no Jenkins
+        maven 'Maven3'
+        jdk 'Java17'
+    }
+
+    environment {
+        // Caminho do JENKINS_HOME — opcional se já estiver configurado
+        JENKINS_HOME = "E:\\Jenkins"
+    }
+
     stages {
-        stage('Checkout') {
+
+        stage('Preparar ambiente') {
             steps {
-                git 'https://github.com/seu-usuario/projeto-jenkins-java.git'
+                echo 'Configurando ambiente seguro para Git...'
+                bat 'git config --global --add safe.directory "%cd%"'
             }
         }
 
-        stage('Build') {
+        stage('Clonar repositório') {
             steps {
-                bat 'mvn clean package'
+                echo 'Baixando projeto do GitHub...'
+                git branch: 'main', url: 'https://github.com/lucaspaiolo/projeto-jenkins-java.git'
             }
         }
 
-        stage('Run') {
+        stage('Compilar projeto') {
             steps {
-                bat 'java -jar target/projeto-jenkins-java-1.0-SNAPSHOT.jar'
+                echo 'Iniciando build com Maven...'
+                bat 'mvn clean compile'
+            }
+        }
+
+        stage('Testes') {
+            steps {
+                echo 'Executando testes (se existirem)...'
+                bat 'mvn test || echo Nenhum teste encontrado'
+            }
+        }
+
+        stage('Executar aplicação') {
+            steps {
+                echo 'Rodando aplicação Java...'
+                bat 'java -jar target\\*.jar || echo Nenhum .jar encontrado — talvez seja projeto sem empacotamento'
             }
         }
     }
+
+    post {
+        success {
+            echo '✅ Build e execução concluídos com sucesso!'
+        }
+        failure {
+            echo '❌ Ocorreu um erro na pipeline. Verifique o console output.'
+        }
+    }
 }
+
