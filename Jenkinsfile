@@ -24,7 +24,7 @@ pipeline {
         stage('Clonar repositório') {
             steps {
                 echo 'Baixando projeto do GitHub...'
-                git branch: 'main', url: 'https://github.com/lucaspaiolo/projeto-jenkins-java.git'
+                git branch: 'main', url: 'https://github.com/lucaspaiolog/projeto-jenkins-java.git'
             }
         }
 
