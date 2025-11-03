@@ -15,6 +15,7 @@ pipeline {
         stage('Preparar ambiente') {
             steps {
                 echo 'Configurando ambiente seguro para Git...'
+                // %cd% é a variável 'current directory' do Windows
                 bat 'git config --global --add safe.directory "%cd%"'
             }
         }
@@ -26,7 +27,6 @@ pipeline {
             }
         }
 
-.
         stage('Compilar, Testar e Empacotar') {
             steps {
                 echo 'Iniciando build, testes e empacotamento com Maven...'
@@ -52,3 +52,4 @@ pipeline {
         }
     }
 }
+
