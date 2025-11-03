@@ -38,7 +38,7 @@ pipeline {
         stage('Executar aplicação') {
             steps {
                 echo 'Rodando aplicação Java...'
-                bat 'java -jar target\\*.jar || echo Nenhum .jar encontrado'
+                bat 'java -jar target\\projeto-jenkins-java-0.0.1-SNAPSHOT.jar || echo Arquivo .jar não encontrado'
             }
         }
     }
