@@ -2,13 +2,11 @@ pipeline {
     agent any
 
     tools {
-        // Garante que o Maven e o Java estejam configurados no Jenkins
         maven 'Maven3'
         jdk 'Java17'
     }
 
     environment {
-        // Caminho do JENKINS_HOME — opcional se já estiver configurado
         JENKINS_HOME = "E:\\Jenkins"
     }
 
@@ -28,24 +26,19 @@ pipeline {
             }
         }
 
-        stage('Compilar projeto') {
+.
+        stage('Compilar, Testar e Empacotar') {
             steps {
-                echo 'Iniciando build com Maven...'
-                bat 'mvn clean compile'
+                echo 'Iniciando build, testes e empacotamento com Maven...'
+                bat 'mvn clean package'
             }
         }
 
-        stage('Testes') {
-            steps {
-                echo 'Executando testes (se existirem)...'
-                bat 'mvn test || echo Nenhum teste encontrado'
-            }
-        }
 
         stage('Executar aplicação') {
             steps {
                 echo 'Rodando aplicação Java...'
-                bat 'java -jar target\\*.jar || echo Nenhum .jar encontrado — talvez seja projeto sem empacotamento'
+                bat 'java -jar target\\*.jar || echo Nenhum .jar encontrado'
             }
         }
     }
@@ -59,4 +52,3 @@ pipeline {
         }
     }
 }
-
